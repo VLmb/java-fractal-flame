@@ -1,7 +1,6 @@
 package academy.generation.transformations;
 
 import academy.model.TransformationsEnum;
-import java.util.HashMap;
 import java.util.Map;
 
 public class TransformationFactory {
