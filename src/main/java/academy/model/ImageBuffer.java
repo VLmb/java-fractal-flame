@@ -1,6 +1,6 @@
 package academy.model;
 
-record ImageBuffer(
+public record ImageBuffer(
     int width,
     int height,
     Pixel[] pixels

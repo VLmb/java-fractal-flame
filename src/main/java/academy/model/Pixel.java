@@ -1,6 +1,7 @@
 package academy.model;
 
 import lombok.Data;
+import java.awt.Color;
 
 @Data
 public class Pixel {
@@ -25,6 +26,10 @@ public class Pixel {
         this.red += red;
         this.green += green;
         this.blue += blue;
+    }
+
+    public void addHit(Color color) {
+        addHit(color.getRed(), color.getGreen(), color.getBlue());
     }
 
     public void merge(Pixel other) {
