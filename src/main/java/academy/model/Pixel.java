@@ -26,4 +26,11 @@ public class Pixel {
         this.green += green;
         this.blue += blue;
     }
+
+    public void merge(Pixel other) {
+        this.red += other.red();
+        this.green += other.green();
+        this.blue += other.blue();
+        this.hitCount += other.hitCount;
+    }
 }
