@@ -1,10 +1,16 @@
 package academy.model;
 
-public record ImageBuffer(
-    int width,
-    int height,
-    Pixel[] pixels
-) {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public class ImageBuffer {
+
+    private final int width;
+    private final int height;
+    private final Pixel[] pixels;
+    private int maxHitCount = 0;
 
     public static ImageBuffer create(int width, int height) {
         Pixel[] pixels = new Pixel[width * height];
@@ -22,5 +28,11 @@ public record ImageBuffer(
 
     public Pixel getPixel(int x, int y) {
         return pixels[y * width + x];
+    }
+
+    public void updateMaxHitCount(int hitCount) {
+        if (hitCount > maxHitCount) {
+            maxHitCount = hitCount;
+        }
     }
 }

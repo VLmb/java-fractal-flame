@@ -102,11 +102,12 @@ public class FractalRenderer {
             return;
         }
 
-        int pixelX = (int) ((p.x() - bounds.xMin()) / (bounds.xMax() - bounds.xMin()) * image.width());
-        int pixelY = (int) ((p.y() - bounds.yMin()) / (bounds.yMax() - bounds.yMin()) * image.height());
+        int pixelX = (int) ((p.x() - bounds.xMin()) / (bounds.xMax() - bounds.xMin()) * image.getWidth());
+        int pixelY = (int) ((p.y() - bounds.yMin()) / (bounds.yMax() - bounds.yMin()) * image.getHeight());
 
         if (image.inBounds(pixelX, pixelY)) {
             image.getPixel(pixelX, pixelY).addHit(coeff.color());
+            image.updateMaxHitCount(image.getPixel(pixelX, pixelY).getHitCount());
         }
     }
 
@@ -122,11 +123,12 @@ public class FractalRenderer {
     }
 
     private void mergeImage(ImageBuffer target, ImageBuffer source) {
-        for (int y = 0; y < target.height(); y++) {
-            for (int x = 0; x < target.width(); x++) {
+        for (int y = 0; y < target.getHeight(); y++) {
+            for (int x = 0; x < target.getWidth(); x++) {
                 Pixel targetPixel = target.getPixel(x, y);
                 Pixel sourcePixel = source.getPixel(x, y);
                 targetPixel.merge(sourcePixel);
+                target.updateMaxHitCount(targetPixel.getHitCount());
             }
         }
     }
