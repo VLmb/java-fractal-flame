@@ -1,7 +1,6 @@
 package academy.app;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import academy.config.AppConfig;
 import academy.config.ConfigLoader;
@@ -10,7 +9,6 @@ import academy.generation.FlameFunctionFactory;
 import academy.generation.FractalRenderer;
 import academy.model.AffineCoefficients;
 import academy.model.ImageBuffer;
-import academy.model.Pixel;
 import academy.model.TransformationSpec;
 import academy.view.ImageRenderer;
 import lombok.extern.slf4j.Slf4j;
@@ -82,43 +80,46 @@ public class Application implements Runnable {
     @Override
     public void run() {
 
-        //ToDo: логгирование
+        log.info("Application started");
 
         AppConfig defaultConfig = ConfigLoader.createDefaultConfig();
+        log.debug("Default configuration loaded");
 
         AppConfig jsonConfig = null;
-         if (configPath != null) {
-             jsonConfig = ConfigLoader.loadConfig(configPath);
-         }
+        if (configPath != null) {
+            log.info("Loading configuration from file: {}", configPath);
+            jsonConfig = ConfigLoader.loadConfig(configPath);
+        }
 
-         AppConfig appConfig = AppConfig.builder()
-             .overlayConfig(defaultConfig)
-             .overlayConfig(jsonConfig)
-             .overlayConfig(new AppConfig(
-                    new AppConfig.Size(width, height),
-                    iterationCount,
-                    sampleCount,
-                    outputPath,
-                    threads,
-                    seed,
-                    transformations,
-                    affineCoefficients
-             ))
-             .build();
+        AppConfig appConfig = AppConfig.builder()
+            .overlayConfig(defaultConfig)
+            .overlayConfig(jsonConfig)
+            .overlayConfig(new AppConfig(
+                new AppConfig.Size(width, height),
+                iterationCount,
+                sampleCount,
+                outputPath,
+                threads,
+                seed,
+                transformations,
+                affineCoefficients
+            ))
+            .build();
 
-         log.info("Конфигурация приложения: {}", appConfig);
-
-        //ToDo: нэминг
-        ImageBuffer image;
+        log.info("Application configuration resolved");
 
         List<FlameFunction> functions = FlameFunctionFactory.createFunctions(
             appConfig.affineCoefficients(),
             appConfig.transformations(),
             appConfig.seed()
         );
+        log.debug("Flame functions initialized: {}", functions.size());
 
         FractalRenderer renderer = new FractalRenderer();
+        ImageBuffer image;
+
         if (appConfig.threads() == 1) {
+            log.info("Rendering started in single-threaded mode");
             image = renderer.renderFractal(
                 appConfig.size().width(),
                 appConfig.size().height(),
@@ -128,6 +129,7 @@ public class Application implements Runnable {
                 (long) appConfig.seed()
             );
         } else {
+            log.info("Rendering started in multi-threaded mode (threads={})", appConfig.threads());
             image = renderer.renderFractalParallel(
                 appConfig.size().width(),
                 appConfig.size().height(),
@@ -145,6 +147,6 @@ public class Application implements Runnable {
             ImageRenderer.ImageFormat.PNG
         );
 
-        log.info("Конец!!!");
+        log.info("Rendering finished successfully");
     }
 }

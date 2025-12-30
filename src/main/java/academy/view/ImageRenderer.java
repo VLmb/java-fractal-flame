@@ -2,6 +2,7 @@ package academy.view;
 
 import academy.model.ImageBuffer;
 import academy.model.Pixel;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -9,14 +10,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@Slf4j
 public class ImageRenderer {
 
     public static void save(ImageBuffer buffer, Path path, ImageFormat format) {
         int width = buffer.getWidth();
         int height = buffer.getHeight();
 
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        log.info("Saving image ({}x{}) to {}", width, height, path);
 
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         int[] rgb = new int[width * height];
         int idx = 0;
 
@@ -34,7 +37,9 @@ public class ImageRenderer {
                 Files.createDirectories(path.getParent());
             }
             ImageIO.write(image, format.getExtension(), path.toFile());
+            log.info("Image successfully written to disk");
         } catch (IOException e) {
+            log.warn("Failed to write image to {}", path, e);
             throw new RuntimeException("Failed to save image to " + path, e);
         }
     }

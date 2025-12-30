@@ -2,17 +2,21 @@ package academy.generation;
 
 import academy.model.ImageBuffer;
 import academy.model.Pixel;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class LogCorrector {
 
     public static void correct(ImageBuffer imageBuffer) {
         int maxHitCount = imageBuffer.getMaxHitCount();
 
         if (maxHitCount == 0) {
+            log.debug("Log correction skipped: max hit count is zero");
             return;
         }
 
         double maxLog = Math.log10(maxHitCount);
+        log.debug("Applying logarithmic correction with maxHitCount={}", maxHitCount);
 
         for (int y = 0; y < imageBuffer.getHeight(); y++) {
             for (int x = 0; x < imageBuffer.getWidth(); x++) {
@@ -29,7 +33,6 @@ public class LogCorrector {
 
     private static void correctPixel(Pixel pixel, double maxLog) {
         double logIntensity = Math.log10(pixel.getHitCount()) / maxLog;
-
         double colorScale = logIntensity / pixel.getHitCount();
 
         int red = (int) (pixel.getRed() * colorScale);

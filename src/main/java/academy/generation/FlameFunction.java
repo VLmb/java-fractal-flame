@@ -7,15 +7,18 @@ import academy.model.Point;
 import academy.model.TransformationSpec;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import java.awt.Color;
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 @RequiredArgsConstructor
 public class FlameFunction {
 
     private static final int MIN_COLOR_COMPONENT = 0;
-    private static final int MAX_COLOR_COMPONENT= 256;
+    private static final int MAX_COLOR_COMPONENT = 256;
 
     private final List<TransformationSpec> transformations;
     private final AffineCoefficients coefficients;
@@ -23,20 +26,23 @@ public class FlameFunction {
     private final Color color;
 
     public FlameFunction(AffineCoefficients coefficients, List<TransformationSpec> transformations, Random random) {
-        Color color = getRandomColor(random);
         this.transformations = transformations;
         this.coefficients = coefficients;
-        this.color = color;
+        this.color = getRandomColor(random);
+        log.debug("FlameFunction created with {} transformations", transformations != null ? transformations.size() : 0);
     }
 
     public Point applyTransformation(Point point) {
         if (transformations == null || transformations.isEmpty()) {
+            log.warn("Attempted to apply transformation with empty transformation list");
             throw new IllegalArgumentException("Transformations list cannot be null or empty");
         }
         if (coefficients == null) {
+            log.warn("Affine coefficients are null");
             throw new IllegalArgumentException("Affine coefficients cannot be null");
         }
         if (point == null) {
+            log.warn("Input point is null");
             throw new IllegalArgumentException("Point cannot be null");
         }
 
@@ -48,7 +54,9 @@ public class FlameFunction {
 
         for (TransformationSpec spec : transformations) {
             double weight = spec.weight();
-            if (weight == 0.0) continue;
+            if (weight == 0.0) {
+                continue;
+            }
 
             Transformation transformation = TransformationFactory.getTransformation(spec.name());
             Point out = transformation.apply(new Point(affineX, affineY));
@@ -66,5 +74,4 @@ public class FlameFunction {
         int b = random.nextInt(MIN_COLOR_COMPONENT, MAX_COLOR_COMPONENT);
         return new Color(r, g, b);
     }
-
 }

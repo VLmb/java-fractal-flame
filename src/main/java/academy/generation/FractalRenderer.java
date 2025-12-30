@@ -26,7 +26,7 @@ public class FractalRenderer {
         int samplesPerIteration,
         long seed
     ) {
-        log.info("Однопоточный пошел");
+        log.info("Starting single-threaded rendering");
         SplittableRandom random = new SplittableRandom(seed);
         return renderTask(width, height, functions, iterationsPerSample, samplesPerIteration, random);
     }
@@ -39,7 +39,8 @@ public class FractalRenderer {
         int threadsCount,
         long seed
     ) {
-        log.info("Многопоточный пошел");
+        log.info("Starting multi-threaded rendering with {} threads", threadsCount);
+
         ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
         int samplesPerThread = Math.max(1, totalSamples / threadsCount);
         List<Callable<ImageBuffer>> tasks = new ArrayList<>();
@@ -58,8 +59,10 @@ public class FractalRenderer {
                 mergeImage(finalImage, future.get());
             }
 
+            log.info("Parallel rendering completed successfully");
             return finalImage;
         } catch (Exception e) {
+            log.warn("Rendering failed due to an unexpected error", e);
             Thread.currentThread().interrupt();
             throw new RuntimeException(e);
         } finally {
@@ -85,7 +88,6 @@ public class FractalRenderer {
 
             for (int step = 0; step < STEPS_TO_SKIP + iterationsPerSample; step++) {
                 FlameFunction func = randomElement(functions, random);
-
                 currentPoint = func.applyTransformation(currentPoint);
 
                 if (step >= STEPS_TO_SKIP) {

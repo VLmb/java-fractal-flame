@@ -5,7 +5,6 @@ import academy.model.AffineCoefficients;
 import academy.model.TransformationSpec;
 import academy.model.TransformationType;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.util.List;
 

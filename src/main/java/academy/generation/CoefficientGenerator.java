@@ -1,7 +1,6 @@
 package academy.generation;
 
 import academy.model.AffineCoefficients;
-import java.awt.Color;
 import java.util.Random;
 
 public class CoefficientGenerator {
