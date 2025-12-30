@@ -1,20 +1,22 @@
 package academy.generation.transformations;
 
-import academy.model.TransformationsEnum;
+import academy.model.TransformationType;
 import java.util.Map;
 
 public class TransformationFactory {
 
-    private static final Map<TransformationsEnum, Transformation> transformations = Map.of(
-            TransformationsEnum.LINEAR, new LinearTransformation(),
-            TransformationsEnum.HEART, new HeartTransformation(),
-            TransformationsEnum.POLAR, new PolarTransformation(),
-            TransformationsEnum.DISC, new DiscTransformation()
+    private static final Map<TransformationType, Transformation> transformations = Map.of(
+            TransformationType.LINEAR, new LinearTransformation(),
+            TransformationType.HEART, new HeartTransformation(),
+            TransformationType.POLAR, new PolarTransformation(),
+            TransformationType.DISC, new DiscTransformation(),
+            TransformationType.SWIRL, new SwirlTransformation(),
+            TransformationType.SINUSOIDAL, new SinusoidalTransformation()
     );
 
 
 
-    public static Transformation getTransformation(TransformationsEnum type) {
+    public static Transformation getTransformation(TransformationType type) {
         if (type == null) {
             throw new IllegalArgumentException("Transformation type cannot be null");
         }
