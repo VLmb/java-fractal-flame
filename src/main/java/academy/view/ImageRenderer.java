@@ -1,6 +1,6 @@
 package academy.view;
 
-import academy.model.ImageBuffer;
+import academy.model.FractalImage;
 import academy.model.Pixel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,7 +13,7 @@ import java.nio.file.Path;
 @Slf4j
 public class ImageRenderer {
 
-    public static void save(ImageBuffer buffer, Path path, ImageFormat format) {
+    public static void save(FractalImage buffer, Path path, ImageFormat format) {
         int width = buffer.getWidth();
         int height = buffer.getHeight();
 

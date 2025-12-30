@@ -1,8 +1,6 @@
 package academy.render;
 
-import academy.generation.FlameFunction;
-import academy.generation.FractalRenderer;
-import academy.model.ImageBuffer;
+import academy.model.FractalImage;
 import academy.model.Pixel;
 import academy.model.Point;
 import org.junit.jupiter.api.Test;
@@ -36,7 +34,7 @@ class FractalRendererTest {
         int threadsCount = 4;
 
 
-        ImageBuffer image1 = renderer.renderFractalParallel(
+        FractalImage image1 = renderer.renderFractalParallel(
             width,
             height,
             functions,
@@ -46,7 +44,7 @@ class FractalRendererTest {
             seed
         );
 
-        ImageBuffer image2 = renderer.renderFractalParallel(
+        FractalImage image2 = renderer.renderFractalParallel(
             width,
             height,
             functions,
@@ -79,7 +77,7 @@ class FractalRendererTest {
         int samplesPerIteration = 100;
         int threadsCount = 4;
 
-        ImageBuffer image = renderer.renderFractalParallel(
+        FractalImage image = renderer.renderFractalParallel(
             width,
             height,
             functions,

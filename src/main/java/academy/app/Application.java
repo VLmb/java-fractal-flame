@@ -4,11 +4,11 @@ import java.nio.file.Path;
 import java.util.List;
 import academy.config.AppConfig;
 import academy.config.ConfigLoader;
-import academy.generation.FlameFunction;
-import academy.generation.FlameFunctionFactory;
-import academy.generation.FractalRenderer;
+import academy.render.FlameFunction;
+import academy.render.FlameFunctionFactory;
+import academy.render.FractalRenderer;
 import academy.model.AffineCoefficients;
-import academy.model.ImageBuffer;
+import academy.model.FractalImage;
 import academy.model.TransformationSpec;
 import academy.view.ImageRenderer;
 import lombok.extern.slf4j.Slf4j;
@@ -116,7 +116,7 @@ public class Application implements Runnable {
         log.debug("Flame functions initialized: {}", functions.size());
 
         FractalRenderer renderer = new FractalRenderer();
-        ImageBuffer image;
+        FractalImage image;
 
         if (appConfig.threads() == 1) {
             log.info("Rendering started in single-threaded mode");

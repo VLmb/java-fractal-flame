@@ -1,14 +1,14 @@
-package academy.generation;
+package academy.render;
 
-import academy.model.ImageBuffer;
+import academy.model.FractalImage;
 import academy.model.Pixel;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LogCorrector {
 
-    public static void correct(ImageBuffer imageBuffer) {
-        int maxHitCount = imageBuffer.getMaxHitCount();
+    public static void correct(FractalImage fractalImage) {
+        int maxHitCount = fractalImage.getMaxHitCount();
 
         if (maxHitCount == 0) {
             log.debug("Log correction skipped: max hit count is zero");
@@ -18,9 +18,9 @@ public class LogCorrector {
         double maxLog = Math.log10(maxHitCount);
         log.debug("Applying logarithmic correction with maxHitCount={}", maxHitCount);
 
-        for (int y = 0; y < imageBuffer.getHeight(); y++) {
-            for (int x = 0; x < imageBuffer.getWidth(); x++) {
-                Pixel pixel = imageBuffer.getPixel(x, y);
+        for (int y = 0; y < fractalImage.getHeight(); y++) {
+            for (int x = 0; x < fractalImage.getWidth(); x++) {
+                Pixel pixel = fractalImage.getPixel(x, y);
 
                 if (pixel.getHitCount() == 0) {
                     continue;

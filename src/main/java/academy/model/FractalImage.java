@@ -5,21 +5,21 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class ImageBuffer {
+public class FractalImage {
 
     private final int width;
     private final int height;
     private final Pixel[] pixels;
     private int maxHitCount = 0;
 
-    public static ImageBuffer create(int width, int height) {
+    public static FractalImage create(int width, int height) {
         Pixel[] pixels = new Pixel[width * height];
 
         for (int i = 0; i < pixels.length; i++) {
             pixels[i] = new Pixel();
         }
 
-        return new ImageBuffer(width, height, pixels);
+        return new FractalImage(width, height, pixels);
     }
 
     public boolean inBounds(int x, int y) {

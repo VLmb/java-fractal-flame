@@ -1,6 +1,6 @@
-package academy.generation;
+package academy.render;
 
-import academy.model.ImageBuffer;
+import academy.model.FractalImage;
 import academy.model.Pixel;
 import academy.model.Point;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +14,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 @Slf4j
-public class FractalRenderer {
+public class 2FractalRenderer {
 
     private static final double IMAGE_HEIGHT = 2.0;
     private static final int STEPS_TO_SKIP = 20;
 
-    public ImageBuffer renderFractal(
+    public FractalImage renderFractal(
         int width, int height,
         List<FlameFunction> functions,
         int iterationsPerSample,
@@ -31,7 +31,7 @@ public class FractalRenderer {
         return renderTask(width, height, functions, iterationsPerSample, samplesPerIteration, random);
     }
 
-    public ImageBuffer renderFractalParallel(
+    public FractalImage renderFractalParallel(
         int width, int height,
         List<FlameFunction> functions,
         int iterationsPerSample,
@@ -43,7 +43,7 @@ public class FractalRenderer {
 
         ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
         int samplesPerThread = Math.max(1, totalSamples / threadsCount);
-        List<Callable<ImageBuffer>> tasks = new ArrayList<>();
+        List<Callable<FractalImage>> tasks = new ArrayList<>();
 
         SplittableRandom random = new SplittableRandom(seed);
 
@@ -52,10 +52,10 @@ public class FractalRenderer {
         }
 
         try {
-            List<Future<ImageBuffer>> futures = executor.invokeAll(tasks);
-            ImageBuffer finalImage = ImageBuffer.create(width, height);
+            List<Future<FractalImage>> futures = executor.invokeAll(tasks);
+            FractalImage finalImage = FractalImage.create(width, height);
 
-            for (Future<ImageBuffer> future : futures) {
+            for (Future<FractalImage> future : futures) {
                 mergeImage(finalImage, future.get());
             }
 
@@ -70,14 +70,14 @@ public class FractalRenderer {
         }
     }
 
-    private ImageBuffer renderTask(
+    private FractalImage renderTask(
         int width, int height,
         List<FlameFunction> functions,
         int iterationsPerSample,
         int samples,
         SplittableRandom random
     ) {
-        ImageBuffer image = ImageBuffer.create(width, height);
+        FractalImage image = FractalImage.create(width, height);
         ImageBounds bounds = calculateImageBounds(width, height);
 
         for (int sample = 0; sample < samples; sample++) {
@@ -98,7 +98,7 @@ public class FractalRenderer {
         return image;
     }
 
-    private void mapAndColor(ImageBuffer image, Point p, ImageBounds bounds, Color color) {
+    private void mapAndColor(FractalImage image, Point p, ImageBounds bounds, Color color) {
         if (p.x() < bounds.xMin() || p.x() > bounds.xMax() ||
             p.y() < bounds.yMin() || p.y() > bounds.yMax()) {
             return;
@@ -124,7 +124,7 @@ public class FractalRenderer {
         );
     }
 
-    private void mergeImage(ImageBuffer target, ImageBuffer source) {
+    private void mergeImage(FractalImage target, FractalImage source) {
         for (int y = 0; y < target.getHeight(); y++) {
             for (int x = 0; x < target.getWidth(); x++) {
                 Pixel targetPixel = target.getPixel(x, y);

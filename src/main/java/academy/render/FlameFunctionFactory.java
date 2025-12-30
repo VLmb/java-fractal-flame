@@ -1,6 +1,5 @@
-package academy.generation;
+package academy.render;
 
-import academy.generation.transformations.Transformation;
 import academy.model.AffineCoefficients;
 import academy.model.TransformationSpec;
 import lombok.AccessLevel;

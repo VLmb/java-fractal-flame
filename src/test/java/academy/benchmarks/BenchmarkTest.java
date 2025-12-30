@@ -1,9 +1,9 @@
 package academy.benchmarks;
 
 import academy.config.AppConfig;
-import academy.generation.FlameFunction;
-import academy.generation.FlameFunctionFactory;
-import academy.generation.FractalRenderer;
+import academy.render.FlameFunction;
+import academy.render.FlameFunctionFactory;
+import academy.render.FractalRenderer;
 import academy.model.TransformationSpec;
 import academy.model.TransformationType;
 import org.junit.jupiter.api.Test;

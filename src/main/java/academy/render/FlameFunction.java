@@ -1,7 +1,7 @@
-package academy.generation;
+package academy.render;
 
-import academy.generation.transformations.Transformation;
-import academy.generation.transformations.TransformationFactory;
+import academy.render.transformations.Transformation;
+import academy.render.transformations.TransformationFactory;
 import academy.model.AffineCoefficients;
 import academy.model.Point;
 import academy.model.TransformationSpec;
