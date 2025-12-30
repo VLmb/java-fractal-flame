@@ -6,5 +6,8 @@ public enum TransformationType {
     POLAR,
     DISC,
     SWIRL,
-    SINUSOIDAL
+    SINUSOIDAL,
+    SPHERICAL,
+    SPIRAL,
+    HANDKERCHIEF
 }

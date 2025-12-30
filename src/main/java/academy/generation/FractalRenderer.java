@@ -22,20 +22,20 @@ public class FractalRenderer {
     public ImageBuffer renderFractal(
         int width, int height,
         List<FlameFunction> functions,
-        int samplesPerIteration,
         int iterationsPerSample,
+        int samplesPerIteration,
         long seed
     ) {
         log.info("Однопоточный пошел");
         SplittableRandom random = new SplittableRandom(seed);
-        return renderTask(width, height, functions, samplesPerIteration, iterationsPerSample, random);
+        return renderTask(width, height, functions, iterationsPerSample, samplesPerIteration, random);
     }
 
     public ImageBuffer renderFractalParallel(
         int width, int height,
         List<FlameFunction> functions,
-        int totalSamples,
         int iterationsPerSample,
+        int totalSamples,
         int threadsCount,
         long seed
     ) {
@@ -47,7 +47,7 @@ public class FractalRenderer {
         SplittableRandom random = new SplittableRandom(seed);
 
         for (int i = 0; i < threadsCount; i++) {
-            tasks.add(() -> renderTask(width, height, functions, samplesPerThread, iterationsPerSample, random.split()));
+            tasks.add(() -> renderTask(width, height, functions, iterationsPerSample, samplesPerThread, random.split()));
         }
 
         try {
@@ -70,8 +70,8 @@ public class FractalRenderer {
     private ImageBuffer renderTask(
         int width, int height,
         List<FlameFunction> functions,
-        int samples,
         int iterationsPerSample,
+        int samples,
         SplittableRandom random
     ) {
         ImageBuffer image = ImageBuffer.create(width, height);

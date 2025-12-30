@@ -2,7 +2,6 @@ package academy.app.cli;
 
 import academy.model.AffineCoefficients;
 import picocli.CommandLine;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +36,7 @@ public class AffineCoefficientsConverter implements CommandLine.ITypeConverter<L
             double e = parseDouble(nums[4].trim(), "e", block);
             double f = parseDouble(nums[5].trim(), "f", block);
 
-            Color color = null;
-            result.add(new AffineCoefficients(a, b, c, d, e, f, color));
+            result.add(new AffineCoefficients(a, b, c, d, e, f));
         }
 
         return result;

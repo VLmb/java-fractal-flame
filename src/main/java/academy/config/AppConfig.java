@@ -11,6 +11,7 @@ import java.util.List;
 public record AppConfig(
     Size size,
     int iterationCount,
+    int countOfSamples,
     String outputPath,
     int threads,
     long seed,
@@ -33,16 +34,21 @@ public record AppConfig(
         private int width;
         private int height;
         private int iterationCount;
+        private int countOfSamples;
         private String outputPath;
         private int threads;
         private long seed;
         private List<TransformationSpec> transformations = new ArrayList<>();
         private List<AffineCoefficients> affineCoefficients = new ArrayList<>();
 
+        private static final double DEFAULT_SAMPLES_PER_PIXEL = 0.5;
+
         public ConfigBuilder loadDefaultValues() {
             this.width = DefaultValues.WIDTH;
             this.height = DefaultValues.HEIGHT;
             this.iterationCount = DefaultValues.ITERATION_COUNT;
+            this.countOfSamples = (int) (DefaultValues.WIDTH * DefaultValues.HEIGHT * DEFAULT_SAMPLES_PER_PIXEL);
+
             this.outputPath = DefaultValues.OUTPUT_PATH;
             this.threads = DefaultValues.THREADS;
             this.seed = DefaultValues.SEED;
@@ -56,6 +62,7 @@ public record AppConfig(
             //Тернарный оператор показался мне здесь очень уместным :)
             this.width = (config.size() != null && config.size().width() > 0) ? config.size().width() : this.width;
             this.height = (config.size() != null && config.size().height() > 0) ? config.size().height() : this.height;
+            this.countOfSamples = (config.countOfSamples() > 0) ? config.countOfSamples() : this.countOfSamples;
             this.iterationCount = config.iterationCount() > 0 ? config.iterationCount() : this.iterationCount;
             this.outputPath = config.outputPath() != null ? config.outputPath() : this.outputPath;
             this.threads = config.threads() > 0 ? config.threads() : this.threads;
@@ -83,6 +90,11 @@ public record AppConfig(
 
         public ConfigBuilder setIterationCount(int iterationCount) {
             this.iterationCount = iterationCount;
+            return this;
+        }
+
+        public ConfigBuilder setCountOfSamples(int countOfSamples) {
+            this.countOfSamples = countOfSamples;
             return this;
         }
 
@@ -131,6 +143,7 @@ public record AppConfig(
             return new AppConfig(
                 new Size(width, height),
                 iterationCount,
+                countOfSamples,
                 outputPath,
                 threads,
                 seed,

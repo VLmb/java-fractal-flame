@@ -43,6 +43,11 @@ public class Application implements Runnable {
     private int iterationCount;
 
     @Option(
+        names = {"-s", "--sample-count"},
+        description = "Total number of point samples to generate during rendering (higher values reduce noise but increase runtime).")
+    private int sampleCount;
+
+    @Option(
         names = {"-o", "--output-path"},
         description = "Relative path to the output PNG file.")
     private String outputPath;
@@ -77,9 +82,7 @@ public class Application implements Runnable {
     @Override
     public void run() {
 
-        int cores = Runtime.getRuntime().availableProcessors();
-
-        log.info("Доступно ядер процессора: {}", cores);
+        //ToDo: логгирование
 
         AppConfig defaultConfig = ConfigLoader.createDefaultConfig();
 
@@ -94,6 +97,7 @@ public class Application implements Runnable {
              .overlayConfig(new AppConfig(
                     new AppConfig.Size(width, height),
                     iterationCount,
+                    sampleCount,
                     outputPath,
                     threads,
                     seed,
@@ -104,8 +108,6 @@ public class Application implements Runnable {
 
          log.info("Конфигурация приложения: {}", appConfig);
 
-         //ToDo: убрать это куда-то
-        int sample = 500000;
         //ToDo: нэминг
         ImageBuffer image;
 
@@ -121,8 +123,8 @@ public class Application implements Runnable {
                 appConfig.size().width(),
                 appConfig.size().height(),
                 functions,
-                sample,
                 appConfig.iterationCount(),
+                appConfig.countOfSamples(),
                 (long) appConfig.seed()
             );
         } else {
@@ -130,8 +132,8 @@ public class Application implements Runnable {
                 appConfig.size().width(),
                 appConfig.size().height(),
                 functions,
-                sample,
                 appConfig.iterationCount(),
+                appConfig.countOfSamples(),
                 appConfig.threads(),
                 (long) appConfig.seed()
             );

@@ -14,7 +14,10 @@ public final class TransformationFactory {
             TransformationType.POLAR, new PolarTransformation(),
             TransformationType.DISC, new DiscTransformation(),
             TransformationType.SWIRL, new SwirlTransformation(),
-            TransformationType.SINUSOIDAL, new SinusoidalTransformation()
+            TransformationType.SINUSOIDAL, new SinusoidalTransformation(),
+            TransformationType.SPHERICAL, new SphericalTransformation(),
+            TransformationType.SPIRAL, new SpiralTransformation(),
+            TransformationType.HANDKERCHIEF, new HandkerchiefTransformation()
     );
 
 

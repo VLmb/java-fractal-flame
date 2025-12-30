@@ -1,6 +1,7 @@
 {
     "size": {"width": 1980, "height": 1280},
-    "iteration_count": 50000,
+    "iteration_count": 2500,
+    "count_of_samples": 40000,
     "seed": 666,
     "threads": 8,
     "output_path": "lotus.png",

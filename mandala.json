@@ -1,6 +1,6 @@
 {
     "size": {"width": 1280, "height": 720},
-    "iteration_count": 50000000,
+    "iteration_count": 30000,
     "seed": 888,
     "threads": 8,
     "output_path": "mandala.png",
