@@ -1,9 +1,12 @@
 package academy.app;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import academy.config.AppConfig;
 import academy.config.ConfigLoader;
+import academy.generation.FlameFunction;
+import academy.generation.FlameFunctionFactory;
 import academy.generation.FractalRenderer;
 import academy.model.AffineCoefficients;
 import academy.model.ImageBuffer;
@@ -102,17 +105,22 @@ public class Application implements Runnable {
          log.info("Конфигурация приложения: {}", appConfig);
 
          //ToDo: убрать это куда-то
-        int sample = 1;
+        int sample = 500000;
         //ToDo: нэминг
         ImageBuffer image;
+
+        List<FlameFunction> functions = FlameFunctionFactory.createFunctions(
+            appConfig.affineCoefficients(),
+            appConfig.transformations(),
+            appConfig.seed()
+        );
 
         FractalRenderer renderer = new FractalRenderer();
         if (appConfig.threads() == 1) {
             image = renderer.renderFractal(
                 appConfig.size().width(),
                 appConfig.size().height(),
-                appConfig.transformations(),
-                appConfig.affineCoefficients(),
+                functions,
                 sample,
                 appConfig.iterationCount(),
                 (long) appConfig.seed()
@@ -121,8 +129,7 @@ public class Application implements Runnable {
             image = renderer.renderFractalParallel(
                 appConfig.size().width(),
                 appConfig.size().height(),
-                appConfig.transformations(),
-                appConfig.affineCoefficients(),
+                functions,
                 sample,
                 appConfig.iterationCount(),
                 appConfig.threads(),

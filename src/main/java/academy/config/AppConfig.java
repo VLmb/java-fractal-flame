@@ -13,7 +13,7 @@ public record AppConfig(
     int iterationCount,
     String outputPath,
     int threads,
-    double seed,
+    long seed,
     @JsonProperty("functions")
     List<TransformationSpec> transformations,
     @JsonProperty("affine_params")
@@ -35,7 +35,7 @@ public record AppConfig(
         private int iterationCount;
         private String outputPath;
         private int threads;
-        private double seed;
+        private long seed;
         private List<TransformationSpec> transformations = new ArrayList<>();
         private List<AffineCoefficients> affineCoefficients = new ArrayList<>();
 
@@ -96,7 +96,7 @@ public record AppConfig(
             return this;
         }
 
-        public ConfigBuilder setSeed(double seed) {
+        public ConfigBuilder setSeed(long seed) {
             this.seed = seed;
             return this;
         }

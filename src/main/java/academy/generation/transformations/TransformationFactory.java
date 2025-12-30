@@ -1,9 +1,12 @@
 package academy.generation.transformations;
 
 import academy.model.TransformationType;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import java.util.Map;
 
-public class TransformationFactory {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class TransformationFactory {
 
     private static final Map<TransformationType, Transformation> transformations = Map.of(
             TransformationType.LINEAR, new LinearTransformation(),

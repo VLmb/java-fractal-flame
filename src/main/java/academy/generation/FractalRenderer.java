@@ -1,13 +1,10 @@
 package academy.generation;
 
-import academy.generation.transformations.Transformation;
-import academy.generation.transformations.TransformationFactory;
-import academy.model.AffineCoefficients;
 import academy.model.ImageBuffer;
 import academy.model.Pixel;
 import academy.model.Point;
-import academy.model.TransformationSpec;
 import lombok.extern.slf4j.Slf4j;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SplittableRandom;
@@ -24,22 +21,19 @@ public class FractalRenderer {
 
     public ImageBuffer renderFractal(
         int width, int height,
-        List<TransformationSpec> transformations,
-        List<AffineCoefficients> coefficients,
+        List<FlameFunction> functions,
         int samplesPerIteration,
         int iterationsPerSample,
         long seed
     ) {
         log.info("Однопоточный пошел");
         SplittableRandom random = new SplittableRandom(seed);
-        TransformationSelector transformationSelector = new TransformationSelector(transformations);
-        return renderTask(width, height, transformations, coefficients, samplesPerIteration, iterationsPerSample, random, transformationSelector);
+        return renderTask(width, height, functions, samplesPerIteration, iterationsPerSample, random);
     }
 
     public ImageBuffer renderFractalParallel(
         int width, int height,
-        List<TransformationSpec> transformations,
-        List<AffineCoefficients> coefficients,
+        List<FlameFunction> functions,
         int totalSamples,
         int iterationsPerSample,
         int threadsCount,
@@ -50,12 +44,10 @@ public class FractalRenderer {
         int samplesPerThread = Math.max(1, totalSamples / threadsCount);
         List<Callable<ImageBuffer>> tasks = new ArrayList<>();
 
-        TransformationSelector transformationSelector = new TransformationSelector(transformations);
-
         SplittableRandom random = new SplittableRandom(seed);
 
         for (int i = 0; i < threadsCount; i++) {
-            tasks.add(() -> renderTask(width, height, transformations, coefficients, samplesPerThread, iterationsPerSample, random.split(), transformationSelector));
+            tasks.add(() -> renderTask(width, height, functions, samplesPerThread, iterationsPerSample, random.split()));
         }
 
         try {
@@ -77,12 +69,10 @@ public class FractalRenderer {
 
     private ImageBuffer renderTask(
         int width, int height,
-        List<TransformationSpec> transformations,
-        List<AffineCoefficients> coefficients,
+        List<FlameFunction> functions,
         int samples,
         int iterationsPerSample,
-        SplittableRandom random,
-        TransformationSelector transformationSelector
+        SplittableRandom random
     ) {
         ImageBuffer image = ImageBuffer.create(width, height);
         ImageBounds bounds = calculateImageBounds(width, height);
@@ -94,43 +84,19 @@ public class FractalRenderer {
             );
 
             for (int step = 0; step < STEPS_TO_SKIP + iterationsPerSample; step++) {
-                Transformation transformation = transformationSelector.selectTransformation(random);
-                AffineCoefficients coeff = randomElement(coefficients, random);
+                FlameFunction func = randomElement(functions, random);
 
-                currentPoint = applyTransformation(currentPoint, transformation, coeff);
+                currentPoint = func.applyTransformation(currentPoint);
 
                 if (step >= STEPS_TO_SKIP) {
-                    mapAndColor(image, currentPoint, bounds, coeff);
+                    mapAndColor(image, currentPoint, bounds, func.getColor());
                 }
             }
         }
         return image;
     }
 
-    private Point applyTransformation(Point p, Transformation transformation, AffineCoefficients coeff) {
-        double x = coeff.a() * p.x() + coeff.b() * p.y() + coeff.c();
-        double y = coeff.d() * p.x() + coeff.e() * p.y() + coeff.f();
-        return transformation.apply(new Point(x, y));
-    }
-
-    private Point applyTransformation(Point point, List<TransformationSpec> transformations, AffineCoefficients coefficients) {
-        double affineX = coefficients.a() * point.x() + coefficients.b() * point.y() + coefficients.c();
-        double affineY = coefficients.d() * point.x() + coefficients.e() * point.y() + coefficients.f();
-
-        for (TransformationSpec spec : transformations) {
-            Transformation transformation = TransformationFactory.getTransformation(spec.name());
-            double weight = spec.weight();
-
-            Point transformedPoint = transformation.apply(new Point(newX, newY));
-
-            x = transformedPoint.x() * weight;
-            y = transformedPoint.y() * weight;
-        }
-
-        return new Point(x, y);
-    }
-
-    private void mapAndColor(ImageBuffer image, Point p, ImageBounds bounds, AffineCoefficients coeff) {
+    private void mapAndColor(ImageBuffer image, Point p, ImageBounds bounds, Color color) {
         if (p.x() < bounds.xMin() || p.x() > bounds.xMax() ||
             p.y() < bounds.yMin() || p.y() > bounds.yMax()) {
             return;
@@ -140,7 +106,7 @@ public class FractalRenderer {
         int pixelY = (int) ((p.y() - bounds.yMin()) / (bounds.yMax() - bounds.yMin()) * image.getHeight());
 
         if (image.inBounds(pixelX, pixelY)) {
-            image.getPixel(pixelX, pixelY).addHit(coeff.color());
+            image.getPixel(pixelX, pixelY).addHit(color);
             image.updateMaxHitCount(image.getPixel(pixelX, pixelY).getHitCount());
         }
     }
