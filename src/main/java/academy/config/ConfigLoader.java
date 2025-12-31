@@ -10,8 +10,8 @@ import java.nio.file.Path;
 public class ConfigLoader {
 
     private static final ObjectMapper MAPPER = new ObjectMapper()
-        .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-        .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+            .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
 
     public static AppConfig loadConfig(Path configPath) {
         try {

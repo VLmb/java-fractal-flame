@@ -1,17 +1,16 @@
 package academy.render;
 
-import academy.render.transformations.Transformation;
-import academy.render.transformations.TransformationFactory;
 import academy.model.AffineCoefficients;
 import academy.model.Point;
 import academy.model.TransformationSpec;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
+import academy.render.transformations.Transformation;
+import academy.render.transformations.TransformationFactory;
 import java.awt.Color;
 import java.util.List;
 import java.util.Random;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,14 +21,13 @@ public class FlameFunction {
 
     private final List<TransformationSpec> transformations;
     private final AffineCoefficients coefficients;
+
     @Getter
     private final Color color;
 
-    public FlameFunction(AffineCoefficients coefficients, List<TransformationSpec> transformations, Random random) {
-        this.transformations = transformations;
-        this.coefficients = coefficients;
-        this.color = getRandomColor(random);
-        log.debug("FlameFunction created with {} transformations", transformations != null ? transformations.size() : 0);
+    public static FlameFunction createFlameFunction(
+            AffineCoefficients coefficients, List<TransformationSpec> transformations, Random random) {
+        return new FlameFunction(transformations, coefficients, getRandomColor(random));
     }
 
     public Point applyTransformation(Point point) {
@@ -68,7 +66,7 @@ public class FlameFunction {
         return new Point(sumX, sumY);
     }
 
-    private Color getRandomColor(Random random) {
+    private static Color getRandomColor(Random random) {
         if (random == null) {
             throw new IllegalArgumentException("Random generator cannot be null");
         }

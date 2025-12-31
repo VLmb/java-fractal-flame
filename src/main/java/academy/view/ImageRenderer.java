@@ -2,15 +2,14 @@ package academy.view;
 
 import academy.model.FractalImage;
 import academy.model.Pixel;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import javax.imageio.ImageIO;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -45,8 +44,9 @@ public final class ImageRenderer {
         image.setRGB(0, 0, width, height, rgb, 0, width);
 
         try {
-            if (path.getParent() != null) {
-                Files.createDirectories(path.getParent());
+            Path parent = path.getParent();
+            if (parent != null) {
+                Files.createDirectories(parent);
             }
             ImageIO.write(image, format.getExtension(), path.toFile());
             log.info("Image successfully written to disk");

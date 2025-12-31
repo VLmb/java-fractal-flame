@@ -10,10 +10,6 @@ public class DiscTransformation implements Transformation {
 
         double factor = angle / Math.PI;
 
-        return new Point(
-            factor * Math.sin(Math.PI * radius),
-            factor * Math.cos(Math.PI * radius)
-        );
+        return new Point(factor * Math.sin(Math.PI * radius), factor * Math.cos(Math.PI * radius));
     }
-
 }

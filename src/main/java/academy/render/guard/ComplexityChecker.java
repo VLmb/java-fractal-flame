@@ -10,15 +10,13 @@ public final class ComplexityChecker {
 
     private static final long MAX_ITERATIONS_PER_THREAD = 2_000_000_000L;
 
-    public static void checkComplexity(
-        int iterationCount,
-        int sampleCount,
+    public static void checkComplexity(int iterationCount, int sampleCount, int threadCount) {
 
-        int threadCount
-    ) {
         long iterationsPerThread = (long) iterationCount * sampleCount / threadCount;
         if (iterationsPerThread > MAX_ITERATIONS_PER_THREAD) {
-            log.warn("A large number of iterations per thread: {}, the program will take a long time to complete. To speed up the program, try lowering iterationCount, sampleCount or increase threads count.", iterationsPerThread);
+            log.warn(
+                    "A large number of iterations per thread: {}, the program will take a long time to complete. To speed up the program, try lowering iterationCount, sampleCount or increase threads count.",
+                    iterationsPerThread);
         }
     }
 }

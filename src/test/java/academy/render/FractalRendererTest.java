@@ -1,22 +1,19 @@
 package academy.render;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import academy.model.FractalImage;
 import academy.model.Pixel;
 import academy.model.Point;
-import org.junit.jupiter.api.Test;
 import java.awt.Color;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 class FractalRendererTest {
 
     private final FractalRenderer renderer = new FractalRenderer();
-    private final FlameFunction fakeFunction = new FlameFunction(
-        null,
-        null,
-        new Color(28, 54, 93)
-    ) {
+    private final FlameFunction fakeFunction = new FlameFunction(null, null, new Color(28, 54, 93)) {
         @Override
         public Point applyTransformation(Point p) {
             return new Point(0.0, 0.0);
@@ -33,26 +30,11 @@ class FractalRendererTest {
         int samplesPerIteration = 100;
         int threadsCount = 4;
 
-
         FractalImage image1 = renderer.renderFractalParallel(
-            width,
-            height,
-            functions,
-            iterationsPerSample,
-            samplesPerIteration,
-            threadsCount,
-            seed
-        );
+                width, height, functions, iterationsPerSample, samplesPerIteration, threadsCount, seed);
 
         FractalImage image2 = renderer.renderFractalParallel(
-            width,
-            height,
-            functions,
-            iterationsPerSample,
-            samplesPerIteration,
-            threadsCount,
-            seed
-        );
+                width, height, functions, iterationsPerSample, samplesPerIteration, threadsCount, seed);
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -78,14 +60,7 @@ class FractalRendererTest {
         int threadsCount = 4;
 
         FractalImage image = renderer.renderFractalParallel(
-            width,
-            height,
-            functions,
-            iterationsPerSample,
-            samplesPerIteration,
-            threadsCount,
-            seed
-        );
+                width, height, functions, iterationsPerSample, samplesPerIteration, threadsCount, seed);
 
         assertTrue(image.getMaxHitCount() == 10000);
         assertTrue(image.getPixel(50, 50).getHitCount() == image.getMaxHitCount());

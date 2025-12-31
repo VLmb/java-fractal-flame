@@ -1,9 +1,9 @@
 package academy.render.transformations;
 
 import academy.model.TransformationType;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TransformationFactory {
@@ -17,10 +17,7 @@ public final class TransformationFactory {
             TransformationType.SINUSOIDAL, new SinusoidalTransformation(),
             TransformationType.SPHERICAL, new SphericalTransformation(),
             TransformationType.SPIRAL, new SpiralTransformation(),
-            TransformationType.HANDKERCHIEF, new HandkerchiefTransformation()
-    );
-
-
+            TransformationType.HANDKERCHIEF, new HandkerchiefTransformation());
 
     public static Transformation getTransformation(TransformationType type) {
         if (type == null) {

@@ -3,10 +3,10 @@ package academy.config;
 import academy.app.DefaultValues;
 import academy.model.AffineCoefficients;
 import academy.model.TransformationSpec;
-import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public final class ConfigBuilder {
@@ -161,14 +161,13 @@ public final class ConfigBuilder {
 
     public AppConfig build() {
         return new AppConfig(
-            new AppConfig.Size(width, height),
-            iterationCount,
-            sampleCount,
-            outputPath,
-            threads,
-            seed,
-            List.copyOf(transformations),
-            List.copyOf(affineCoefficients)
-        );
+                new AppConfig.Size(width, height),
+                iterationCount,
+                sampleCount,
+                outputPath,
+                threads,
+                seed,
+                List.copyOf(transformations),
+                List.copyOf(affineCoefficients));
     }
 }

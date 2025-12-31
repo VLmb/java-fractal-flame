@@ -1,15 +1,16 @@
 package academy.config;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import academy.app.DefaultValues;
 import academy.model.AffineCoefficients;
 import academy.model.TransformationSpec;
 import academy.model.TransformationType;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class ConfigLoaderTest {
     @TempDir
@@ -19,7 +20,8 @@ class ConfigLoaderTest {
     void shouldLoadConfig() throws Exception {
         Path jsonConfigPath = tempDir.resolve("config.json");
 
-        String content = """
+        String content =
+                """
             {
               "size": { "width": 1000, "height": 800 },
               "iteration_count": 2500,
@@ -53,13 +55,21 @@ class ConfigLoaderTest {
 
         assertNotNull(loadedConfig.transformations());
         assertEquals(2, loadedConfig.transformations().size());
-        assertEquals(new TransformationSpec(TransformationType.SWIRL, 1.0), loadedConfig.transformations().get(0));
-        assertEquals(new TransformationSpec(TransformationType.SINUSOIDAL, 0.4), loadedConfig.transformations().get(1));
+        assertEquals(
+                new TransformationSpec(TransformationType.SWIRL, 1.0),
+                loadedConfig.transformations().get(0));
+        assertEquals(
+                new TransformationSpec(TransformationType.SINUSOIDAL, 0.4),
+                loadedConfig.transformations().get(1));
 
         assertNotNull(loadedConfig.affineCoefficients());
         assertEquals(2, loadedConfig.affineCoefficients().size());
-        assertEquals(new AffineCoefficients(0.5, 0.0, 0.5, 0.0, 0.5, 0.0), loadedConfig.affineCoefficients().get(0));
-        assertEquals(new AffineCoefficients(0.0, -0.5, 0.0, 0.5, 0.0, 0.0), loadedConfig.affineCoefficients().get(1));
+        assertEquals(
+                new AffineCoefficients(0.5, 0.0, 0.5, 0.0, 0.5, 0.0),
+                loadedConfig.affineCoefficients().get(0));
+        assertEquals(
+                new AffineCoefficients(0.0, -0.5, 0.0, 0.5, 0.0, 0.0),
+                loadedConfig.affineCoefficients().get(1));
     }
 
     @Test

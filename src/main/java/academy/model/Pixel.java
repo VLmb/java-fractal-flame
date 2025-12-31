@@ -1,7 +1,7 @@
 package academy.model;
 
-import lombok.Data;
 import java.awt.Color;
+import lombok.Data;
 
 @Data
 public class Pixel {
@@ -17,12 +17,14 @@ public class Pixel {
         }
         return red / hitCount;
     }
+
     public int green() {
         if (hitCount == 0) {
             return 0;
         }
         return green / hitCount;
     }
+
     public int blue() {
         if (hitCount == 0) {
             return 0;

@@ -1,9 +1,9 @@
 package academy.app.cli;
 
 import academy.model.AffineCoefficients;
-import picocli.CommandLine;
 import java.util.ArrayList;
 import java.util.List;
+import picocli.CommandLine;
 
 public class AffineCoefficientsConverter implements CommandLine.ITypeConverter<List<AffineCoefficients>> {
 
@@ -25,8 +25,7 @@ public class AffineCoefficientsConverter implements CommandLine.ITypeConverter<L
             String[] nums = block.split(",");
             if (nums.length != 6) {
                 throw new CommandLine.TypeConversionException(
-                    "Invalid affine params block: '" + block + "'. Expected 6 numbers: a,b,c,d,e,f."
-                );
+                        "Invalid affine params block: '" + block + "'. Expected 6 numbers: a,b,c,d,e,f.");
             }
 
             double a = parseDouble(nums[0].trim(), "a", block);
@@ -47,8 +46,7 @@ public class AffineCoefficientsConverter implements CommandLine.ITypeConverter<L
             return Double.parseDouble(raw);
         } catch (NumberFormatException e) {
             throw new CommandLine.TypeConversionException(
-                "Invalid number for '" + name + "' in block '" + block + "': '" + raw + "'."
-            );
+                    "Invalid number for '" + name + "' in block '" + block + "': '" + raw + "'.");
         }
     }
 }

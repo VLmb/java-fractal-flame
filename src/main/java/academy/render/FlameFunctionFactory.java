@@ -2,20 +2,17 @@ package academy.render;
 
 import academy.model.AffineCoefficients;
 import academy.model.TransformationSpec;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FlameFunctionFactory {
 
     public static List<FlameFunction> createFunctions(
-        List<AffineCoefficients> affineCoefficients,
-        List<TransformationSpec> transformations,
-        long seed
-    ) {
+            List<AffineCoefficients> affineCoefficients, List<TransformationSpec> transformations, long seed) {
         if (transformations == null || transformations.isEmpty()) {
             throw new IllegalArgumentException("Transformations list must not be null or empty");
         }
@@ -26,7 +23,7 @@ public final class FlameFunctionFactory {
         Random random = new Random(seed);
         var functions = new ArrayList<FlameFunction>();
         for (var coefficients : affineCoefficients) {
-            functions.add(new FlameFunction(coefficients, transformations, random));
+            functions.add(FlameFunction.createFlameFunction(coefficients, transformations, random));
         }
 
         return functions;

@@ -3,7 +3,6 @@ package academy.render;
 import academy.model.FractalImage;
 import academy.model.Pixel;
 import academy.model.Point;
-import lombok.extern.slf4j.Slf4j;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FractalRenderer {
@@ -21,25 +21,20 @@ public class FractalRenderer {
     private static final int STEPS_TO_SKIP = 20;
 
     public FractalImage renderFractal(
-        int width, int height,
-        List<FlameFunction> functions,
-        int iterationsPerSample,
-        int sampleCount,
-        long seed
-    ) {
+            int width, int height, List<FlameFunction> functions, int iterationsPerSample, int sampleCount, long seed) {
         log.info("Starting single-threaded rendering");
         SplittableRandom random = new SplittableRandom(seed);
         return renderTask(width, height, functions, iterationsPerSample, sampleCount, random);
     }
 
     public FractalImage renderFractalParallel(
-        int width, int height,
-        List<FlameFunction> functions,
-        int iterationsPerSample,
-        int totalSamples,
-        int threadsCount,
-        long seed
-    ) {
+            int width,
+            int height,
+            List<FlameFunction> functions,
+            int iterationsPerSample,
+            int totalSamples,
+            int threadsCount,
+            long seed) {
         log.info("Starting multi-threaded rendering with {} threads", threadsCount);
 
         ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
@@ -49,7 +44,8 @@ public class FractalRenderer {
         SplittableRandom random = new SplittableRandom(seed);
 
         for (int i = 0; i < threadsCount; i++) {
-            tasks.add(() -> renderTask(width, height, functions, iterationsPerSample, samplesPerThread, random.split()));
+            tasks.add(
+                    () -> renderTask(width, height, functions, iterationsPerSample, samplesPerThread, random.split()));
         }
 
         try {
@@ -73,20 +69,18 @@ public class FractalRenderer {
     }
 
     private FractalImage renderTask(
-        int width, int height,
-        List<FlameFunction> functions,
-        int iterationsPerSample,
-        int samples,
-        SplittableRandom random
-    ) {
+            int width,
+            int height,
+            List<FlameFunction> functions,
+            int iterationsPerSample,
+            int samples,
+            SplittableRandom random) {
         FractalImage image = FractalImage.create(width, height);
         ImageBounds bounds = calculateImageBounds(width, height);
 
         for (int sample = 0; sample < samples; sample++) {
             Point currentPoint = new Point(
-                random.nextDouble(bounds.xMin(), bounds.xMax()),
-                random.nextDouble(bounds.yMin(), bounds.yMax())
-            );
+                    random.nextDouble(bounds.xMin(), bounds.xMax()), random.nextDouble(bounds.yMin(), bounds.yMax()));
 
             for (int step = 0; step < STEPS_TO_SKIP + iterationsPerSample; step++) {
                 FlameFunction func = randomElement(functions, random);
@@ -101,8 +95,7 @@ public class FractalRenderer {
     }
 
     private void mapAndColor(FractalImage image, Point p, ImageBounds bounds, Color color) {
-        if (p.x() < bounds.xMin() || p.x() > bounds.xMax() ||
-            p.y() < bounds.yMin() || p.y() > bounds.yMax()) {
+        if (p.x() < bounds.xMin() || p.x() > bounds.xMax() || p.y() < bounds.yMin() || p.y() > bounds.yMax()) {
             return;
         }
 
@@ -118,12 +111,7 @@ public class FractalRenderer {
     private ImageBounds calculateImageBounds(int width, int height) {
         double ratio = (double) width / height;
         double worldWidth = ratio * IMAGE_HEIGHT;
-        return new ImageBounds(
-            -worldWidth / 2,
-            worldWidth / 2,
-            -IMAGE_HEIGHT / 2,
-            IMAGE_HEIGHT / 2
-        );
+        return new ImageBounds(-worldWidth / 2, worldWidth / 2, -IMAGE_HEIGHT / 2, IMAGE_HEIGHT / 2);
     }
 
     private void mergeImage(FractalImage target, FractalImage source) {

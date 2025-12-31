@@ -14,5 +14,4 @@ public class HeartTransformation implements Transformation {
 
         return new Point(newX, newY);
     }
-
 }

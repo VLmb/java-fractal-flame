@@ -1,12 +1,10 @@
 package academy.app.cli;
 
-import academy.config.AppConfig;
 import academy.model.TransformationSpec;
 import academy.model.TransformationType;
-import picocli.CommandLine;
-
 import java.util.ArrayList;
 import java.util.List;
+import picocli.CommandLine;
 
 public class TransformationsConverter implements CommandLine.ITypeConverter<List<TransformationSpec>> {
 
@@ -28,8 +26,7 @@ public class TransformationsConverter implements CommandLine.ITypeConverter<List
             String[] parts = item.split(":");
             if (parts.length != 2) {
                 throw new CommandLine.TypeConversionException(
-                    "Invalid functions format: '" + item + "'. Expected <name>:<weight>."
-                );
+                        "Invalid functions format: '" + item + "'. Expected <name>:<weight>.");
             }
 
             TransformationType type = parseType(parts[0].trim());
