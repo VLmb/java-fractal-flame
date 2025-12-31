@@ -12,13 +12,22 @@ public class Pixel {
     private int hitCount;
 
     public int red() {
-        return hitCount == 0 ? 0 : red / hitCount;
+        if (hitCount == 0) {
+            return 0;
+        }
+        return red / hitCount;
     }
     public int green() {
-        return hitCount == 0 ? 0 : green / hitCount;
+        if (hitCount == 0) {
+            return 0;
+        }
+        return green / hitCount;
     }
     public int blue() {
-        return hitCount == 0 ? 0 : blue / hitCount;
+        if (hitCount == 0) {
+            return 0;
+        }
+        return blue / hitCount;
     }
 
     public void addHit(int red, int green, int blue) {

@@ -1,4 +1,4 @@
-package academy.app;
+package academy;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -112,7 +112,7 @@ public class Application implements Runnable {
 
         ComplexityChecker.checkComplexity(
             appConfig.iterationCount(),
-            appConfig.countOfSamples(),
+            appConfig.sampleCount(),
             appConfig.threads()
         );
 
@@ -133,7 +133,7 @@ public class Application implements Runnable {
                 appConfig.size().height(),
                 functions,
                 appConfig.iterationCount(),
-                appConfig.countOfSamples(),
+                appConfig.sampleCount(),
                 (long) appConfig.seed()
             );
         } else {
@@ -143,7 +143,7 @@ public class Application implements Runnable {
                 appConfig.size().height(),
                 functions,
                 appConfig.iterationCount(),
-                appConfig.countOfSamples(),
+                appConfig.sampleCount(),
                 appConfig.threads(),
                 (long) appConfig.seed()
             );

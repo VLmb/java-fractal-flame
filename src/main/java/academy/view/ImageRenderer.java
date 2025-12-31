@@ -2,6 +2,8 @@ package academy.view;
 
 import academy.model.FractalImage;
 import academy.model.Pixel;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
@@ -11,11 +13,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Slf4j
-public class ImageRenderer {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ImageRenderer {
 
-    public static void save(FractalImage buffer, Path path, ImageFormat format) {
-        int width = buffer.getWidth();
-        int height = buffer.getHeight();
+    public static void save(FractalImage fractalImage, Path path, ImageFormat format) {
+        if (fractalImage == null) {
+            throw new IllegalArgumentException("Image fractalImage cannot be null");
+        }
+        if (path == null) {
+            throw new IllegalArgumentException("Path cannot be null");
+        }
+
+        int width = fractalImage.getWidth();
+        int height = fractalImage.getHeight();
+
+        if (width <= 0 || height <= 0) throw new IllegalArgumentException("Invalid image size");
 
         log.info("Saving image ({}x{}) to {}", width, height, path);
 
@@ -25,7 +37,7 @@ public class ImageRenderer {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                Pixel p = buffer.getPixel(x, y);
+                Pixel p = fractalImage.getPixel(x, y);
                 rgb[idx++] = packRgb(p.getRed(), p.getGreen(), p.getBlue());
             }
         }

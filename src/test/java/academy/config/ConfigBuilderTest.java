@@ -12,16 +12,16 @@ class ConfigBuilderTest {
     @Test
     void shouldOverlayConfigAndOverrideOnlyProvidedFields() {
         AppConfig base = AppConfig.builder()
-            .loadDefaultValues()
-            .setWidth(800)
-            .setHeight(600)
-            .setIterationCount(1000)
-            .setCountOfSamples(800)
-            .setOutputPath("test.png")
-            .setThreads(2)
-            .setSeed(10)
-            .overlayTransformations(List.of(new TransformationSpec(TransformationType.SWIRL, 1.0)))
-            .overlayAffineCoefficients(List.of(new AffineCoefficients(0.5, 0.0, 0.5, 0.0, 0.5, 0.0)))
+            .setDefaultValues()
+            .withWidth(800)
+            .withHeight(600)
+            .withIterationCount(1000)
+            .withSampleCount(800)
+            .withOutputPath("test.png")
+            .withThreads(2)
+            .withSeed(10)
+            .withTransformations(List.of(new TransformationSpec(TransformationType.SWIRL, 1.0)))
+            .withAffineCoefficients(List.of(new AffineCoefficients(0.5, 0.0, 0.5, 0.0, 0.5, 0.0)))
             .build();
 
         AppConfig overlay = new AppConfig(
@@ -30,13 +30,13 @@ class ConfigBuilderTest {
             222,
             null,
             8,
-            0,
+            10,
             List.of(new TransformationSpec(TransformationType.SINUSOIDAL, 0.4)),
             List.of()
         );
 
         AppConfig result = AppConfig.builder()
-            .loadDefaultValues()
+            .setDefaultValues()
             .overlayConfig(base)
             .overlayConfig(overlay)
             .build();
@@ -45,7 +45,7 @@ class ConfigBuilderTest {
         assertEquals(600, result.size().height());
 
         assertEquals(1000, result.iterationCount());
-        assertEquals(222, result.countOfSamples());
+        assertEquals(222, result.sampleCount());
         assertEquals("test.png", result.outputPath());
         assertEquals(8, result.threads());
         assertEquals(10L, result.seed());

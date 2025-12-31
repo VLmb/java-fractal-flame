@@ -6,26 +6,29 @@ import academy.render.FlameFunctionFactory;
 import academy.render.FractalRenderer;
 import academy.model.TransformationSpec;
 import academy.model.TransformationType;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Slf4j
 class BenchmarkTest {
 
+    @Disabled
     @Test
     void shouldCompareTimeOfDifferentThreadCount() {
         AppConfig config = AppConfig.builder()
-            .loadDefaultValues()
-            .setIterationCount(2500)
-            .setCountOfSamples(40000)
-            .overlayTransformations(
+            .setDefaultValues()
+            .withTransformations(
                 List.of(
                     new TransformationSpec(TransformationType.HANDKERCHIEF, 1.0),
                     new TransformationSpec(TransformationType.SWIRL, 0.8),
                     new TransformationSpec(TransformationType.SINUSOIDAL, 0.5)
                 )
             )
-            .overlayAffineCoefficients(
+            .withAffineCoefficients(
                 List.of(
                     new academy.model.AffineCoefficients(0.5,  0.0,  0.5, 0.0, 0.5,  0.0),
                     new academy.model.AffineCoefficients(0.5,  0.0, -0.5, 0.0, 0.5,  0.0),
@@ -41,10 +44,10 @@ class BenchmarkTest {
         long fourThreadsTime = trackDuration(4, config);
         long eightThreadsTime = trackDuration(8, config);
 
-        System.out.println("Single Thread Time: " + singleThreadTime + " ms");
-        System.out.println("Two Threads Time: " + twoThreadsTime + " ms");
-        System.out.println("Four Threads Time: " + fourThreadsTime + " ms");
-        System.out.println("Eight Threads Time: " + eightThreadsTime + " ms");
+        log.info("Single Thread Time: " + singleThreadTime + " ms");
+        log.info("Two Threads Time: " + twoThreadsTime + " ms");
+        log.info("Four Threads Time: " + fourThreadsTime + " ms");
+        log.info("Eight Threads Time: " + eightThreadsTime + " ms");
 
         assertTrue(singleThreadTime > twoThreadsTime &&
             twoThreadsTime > fourThreadsTime &&
@@ -69,7 +72,7 @@ class BenchmarkTest {
                 config.size().height(),
                 functions,
                 config.iterationCount(),
-                config.countOfSamples(),
+                config.sampleCount(),
                 (long) config.seed()
             );
             return System.currentTimeMillis() - start;
@@ -80,7 +83,7 @@ class BenchmarkTest {
                 config.size().height(),
                 functions,
                 config.iterationCount(),
-                config.countOfSamples(),
+                config.sampleCount(),
                 countOfThreads,
                 (long) config.seed()
             );

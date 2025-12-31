@@ -69,6 +69,9 @@ public class FlameFunction {
     }
 
     private Color getRandomColor(Random random) {
+        if (random == null) {
+            throw new IllegalArgumentException("Random generator cannot be null");
+        }
         int r = random.nextInt(MIN_COLOR_COMPONENT, MAX_COLOR_COMPONENT);
         int g = random.nextInt(MIN_COLOR_COMPONENT, MAX_COLOR_COMPONENT);
         int b = random.nextInt(MIN_COLOR_COMPONENT, MAX_COLOR_COMPONENT);

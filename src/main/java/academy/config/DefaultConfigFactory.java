@@ -8,9 +8,9 @@ public final class DefaultConfigFactory {
 
     public static AppConfig create() {
         return AppConfig.builder()
-            .loadDefaultValues()
-            .overlayAffineCoefficients(DefaultConfigSpec.AFFINE_COEFFICIENTS)
-            .overlayTransformations(DefaultConfigSpec.TRANSFORMATIONS)
+            .setDefaultValues()
+            .withAffineCoefficients(DefaultConfigSpec.AFFINE_COEFFICIENTS)
+            .withTransformations(DefaultConfigSpec.TRANSFORMATIONS)
             .build();
     }
 }

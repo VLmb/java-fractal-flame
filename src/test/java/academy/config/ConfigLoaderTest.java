@@ -46,7 +46,7 @@ class ConfigLoaderTest {
         assertEquals(1000, loadedConfig.size().width());
         assertEquals(800, loadedConfig.size().height());
         assertEquals(2500, loadedConfig.iterationCount());
-        assertEquals(1200000, loadedConfig.countOfSamples());
+        assertEquals(1200000, loadedConfig.sampleCount());
         assertEquals("test.png", loadedConfig.outputPath());
         assertEquals(4, loadedConfig.threads());
         assertEquals(12345L, loadedConfig.seed());

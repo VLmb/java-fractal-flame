@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SplittableRandom;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -22,19 +23,19 @@ public class FractalRenderer {
     public FractalImage renderFractal(
         int width, int height,
         List<FlameFunction> functions,
-        int iterationCount,
-        int samplesPerIteration,
+        int iterationsPerSample,
+        int sampleCount,
         long seed
     ) {
         log.info("Starting single-threaded rendering");
         SplittableRandom random = new SplittableRandom(seed);
-        return renderTask(width, height, functions, iterationCount, samplesPerIteration, random);
+        return renderTask(width, height, functions, iterationsPerSample, sampleCount, random);
     }
 
     public FractalImage renderFractalParallel(
         int width, int height,
         List<FlameFunction> functions,
-        int iterationCount,
+        int iterationsPerSample,
         int totalSamples,
         int threadsCount,
         long seed
@@ -48,7 +49,7 @@ public class FractalRenderer {
         SplittableRandom random = new SplittableRandom(seed);
 
         for (int i = 0; i < threadsCount; i++) {
-            tasks.add(() -> renderTask(width, height, functions, iterationCount, samplesPerThread, random.split()));
+            tasks.add(() -> renderTask(width, height, functions, iterationsPerSample, samplesPerThread, random.split()));
         }
 
         try {
@@ -61,10 +62,11 @@ public class FractalRenderer {
 
             log.info("Parallel rendering completed successfully");
             return finalImage;
-        } catch (Exception e) {
-            log.warn("Rendering failed due to an unexpected error", e);
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
+            throw new RuntimeException("Rendering interrupted", e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException("Rendering task failed", e.getCause());
         } finally {
             executor.shutdown();
         }
@@ -136,6 +138,9 @@ public class FractalRenderer {
     }
 
     private <T> T randomElement(List<T> list, SplittableRandom random) {
+        if (list == null || list.isEmpty()) {
+            throw new IllegalArgumentException("list is null or empty");
+        }
         return list.get(random.nextInt(list.size()));
     }
 

@@ -14,6 +14,10 @@ public class LogCorrector {
             log.debug("Log correction skipped: max hit count is zero");
             return;
         }
+        if (maxHitCount <= 1) {
+            log.debug("Log correction skipped: max hit count is {}", maxHitCount);
+            return;
+        }
 
         double maxLog = Math.log10(maxHitCount);
         log.debug("Applying logarithmic correction with maxHitCount={}", maxHitCount);
@@ -32,12 +36,15 @@ public class LogCorrector {
     }
 
     private static void correctPixel(Pixel pixel, double maxLog) {
-        double logIntensity = Math.log10(pixel.getHitCount()) / maxLog;
-        double colorScale = logIntensity / pixel.getHitCount();
+        int hit = pixel.getHitCount();
 
-        int red = (int) (pixel.getRed() * colorScale);
-        int green = (int) (pixel.getGreen() * colorScale);
-        int blue = (int) (pixel.getBlue() * colorScale);
+        double intensity = Math.log10(hit) / maxLog;
+        double invHit = 1.0 / hit;
+        double scale = intensity * invHit;
+
+        int red = (int) (pixel.getRed() * scale);
+        int green = (int) (pixel.getGreen() * scale);
+        int blue = (int) (pixel.getBlue() * scale);
 
         pixel.setRed(red);
         pixel.setGreen(green);
