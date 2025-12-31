@@ -10,6 +10,7 @@ import academy.render.FractalRenderer;
 import academy.model.AffineCoefficients;
 import academy.model.FractalImage;
 import academy.model.TransformationSpec;
+import academy.render.guard.ComplexityChecker;
 import academy.view.ImageRenderer;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
@@ -26,7 +27,7 @@ public class Application implements Runnable {
     private int width;
 
     @Option(
-        names = {"-h", "--height"},
+        names = {"-H", "--height"},
         description = "Height of the output image.")
     private int height;
 
@@ -91,6 +92,7 @@ public class Application implements Runnable {
             jsonConfig = ConfigLoader.loadConfig(configPath);
         }
 
+        //Приоритет КОНСОЛЬ -> JSON - > DEFAULT
         AppConfig appConfig = AppConfig.builder()
             .overlayConfig(defaultConfig)
             .overlayConfig(jsonConfig)
@@ -107,6 +109,12 @@ public class Application implements Runnable {
             .build();
 
         log.info("Application configuration resolved");
+
+        ComplexityChecker.checkComplexity(
+            appConfig.iterationCount(),
+            appConfig.countOfSamples(),
+            appConfig.threads()
+        );
 
         List<FlameFunction> functions = FlameFunctionFactory.createFunctions(
             appConfig.affineCoefficients(),

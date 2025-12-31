@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 @Slf4j
-public class 2FractalRenderer {
+public class FractalRenderer {
 
     private static final double IMAGE_HEIGHT = 2.0;
     private static final int STEPS_TO_SKIP = 20;
@@ -22,19 +22,19 @@ public class 2FractalRenderer {
     public FractalImage renderFractal(
         int width, int height,
         List<FlameFunction> functions,
-        int iterationsPerSample,
+        int iterationCount,
         int samplesPerIteration,
         long seed
     ) {
         log.info("Starting single-threaded rendering");
         SplittableRandom random = new SplittableRandom(seed);
-        return renderTask(width, height, functions, iterationsPerSample, samplesPerIteration, random);
+        return renderTask(width, height, functions, iterationCount, samplesPerIteration, random);
     }
 
     public FractalImage renderFractalParallel(
         int width, int height,
         List<FlameFunction> functions,
-        int iterationsPerSample,
+        int iterationCount,
         int totalSamples,
         int threadsCount,
         long seed
@@ -48,7 +48,7 @@ public class 2FractalRenderer {
         SplittableRandom random = new SplittableRandom(seed);
 
         for (int i = 0; i < threadsCount; i++) {
-            tasks.add(() -> renderTask(width, height, functions, iterationsPerSample, samplesPerThread, random.split()));
+            tasks.add(() -> renderTask(width, height, functions, iterationCount, samplesPerThread, random.split()));
         }
 
         try {
