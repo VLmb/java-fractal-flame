@@ -24,3 +24,9 @@ dependency-reduced-pom.xml
 hs_err_pid*
 
 *.pdf
+/.editorconfig
+/.gitattributes
+/.gitlab-ci.yml
+/pmd.xml
+/spotbugs-excludes.xml
+/test_output.png
